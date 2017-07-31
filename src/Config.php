@@ -2,8 +2,7 @@
 
 namespace Encore\Admin\Config;
 
-use Encore\Admin\Auth\Database\Menu;
-use Encore\Admin\Auth\Database\Permission;
+use Encore\Admin\Admin;
 use Encore\Admin\Extension;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +18,8 @@ class Config extends Extension
         static::registerRoutes();
 
         static::loadConfig();
+
+        Admin::extend('config', __CLASS__);
     }
 
     /**
@@ -51,24 +52,13 @@ class Config extends Extension
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function import()
     {
-        $lastOrder = Menu::max('order');
+        parent::createMenu('Config', 'config', 'fa-toggle-on');
 
-        // Add a menu.
-        Menu::create([
-            'parent_id' => 0,
-            'order'     => $lastOrder + 1,
-            'title'     => 'Config',
-            'icon'      => 'fa-toggle-on',
-            'uri'       => 'config',
-        ]);
-
-        // Add a permission.
-        Permission::create([
-            'name'          => 'Admin Config',
-            'slug'          => 'ext.config',
-            'http_path'     => admin_base_path('config*'),
-        ]);
+        parent::createPermission('Admin Config', 'ext.config', 'config*');
     }
 }
