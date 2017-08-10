@@ -4,10 +4,21 @@ namespace Encore\Admin\Config;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Extension;
-use Illuminate\Support\Facades\Route;
 
 class Config extends Extension
 {
+    /**
+     * Load configure into laravel from database.
+     *
+     * @return void
+     */
+    public static function load()
+    {
+        foreach (ConfigModel::all(['name', 'value']) as $config) {
+            config([$config['name'] => $config['value']]);
+        }
+    }
+
     /**
      * Bootstrap this package.
      *
@@ -16,8 +27,6 @@ class Config extends Extension
     public static function boot()
     {
         static::registerRoutes();
-
-        static::loadConfig();
 
         Admin::extend('config', __CLASS__);
     }
@@ -29,27 +38,10 @@ class Config extends Extension
      */
     protected static function registerRoutes()
     {
-        /* @var \Illuminate\Routing\Router $router */
-        Route::group(['prefix' => config('admin.route.prefix')], function ($router) {
-
-            $attributes = array_merge([
-                'middleware' => config('admin.route.middleware'),
-            ], static::config('route', []));
-
-            Route::group($attributes, function ($router) {
-
-                /* @var \Illuminate\Routing\Router $router */
-                $router->resource('config', 'Encore\Admin\Config\ConfigController');
-            });
-
+        parent::routes(function ($router) {
+            /* @var \Illuminate\Routing\Router $router */
+            $router->resource('config', 'Encore\Admin\Config\ConfigController');
         });
-    }
-
-    protected static function loadConfig()
-    {
-        foreach (ConfigModel::all(['name', 'value']) as $config) {
-            config([$config['name'] => $config['value']]);
-        }
     }
 
     /**

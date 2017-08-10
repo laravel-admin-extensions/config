@@ -14,5 +14,7 @@ class ConfigServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
+
+        Config::boot();
     }
 }
