@@ -20,8 +20,8 @@ class ConfigController
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header('Config');
-            $content->description('Config list..');
+            $content->header(trans('admin.config.header'));
+            $content->description(trans('admin.config.description'));
 
             $content->body($this->grid());
         });
@@ -37,8 +37,9 @@ class ConfigController
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header('header');
-            $content->description('description');
+            $configDatabaseItem = ConfigModel::find($id);
+            $content->header(trans('admin.config.header'));
+            $content->description($configDatabaseItem->name);
 
             $content->body($this->form()->edit($id));
         });
@@ -52,8 +53,8 @@ class ConfigController
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('header');
-            $content->description('description');
+            $content->header(trans('admin.config.header'));
+            $content->description(trans('admin.create'));
 
             $content->body($this->form());
         });
@@ -63,19 +64,19 @@ class ConfigController
     {
         return Admin::grid(ConfigModel::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->name()->display(function ($name) {
+            $grid->column('name', trans('admin.name'))->display(function ($name) {
                 return "<a tabindex=\"0\" class=\"btn btn-xs btn-twitter\" role=\"button\" data-toggle=\"popover\" data-html=true title=\"Usage\" data-content=\"<code>config('$name');</code>\">$name</a>";
             });
-            $grid->value();
-            $grid->description();
+            $grid->column('value'      , trans('admin.value'));
+            $grid->column('description', trans('admin.description'));
 
-            $grid->created_at();
-            $grid->updated_at();
+            # $grid->created_at();
+            # $grid->updated_at();
 
             $grid->filter(function ($filter) {
                 $filter->disableIdFilter();
-                $filter->like('name');
-                $filter->like('value');
+                $filter->like('name' , trans('admin.value'));
+                $filter->like('value', trans('admin.description'));
             });
         });
     }
@@ -84,12 +85,12 @@ class ConfigController
     {
         return Admin::form(ConfigModel::class, function (Form $form) {
             $form->display('id', 'ID');
-            $form->text('name')->rules('required');
-            $form->textarea('value')->rules('required');
-            $form->textarea('description');
+            $form->text    ('name'       , trans('admin.value'))->rules('required');
+            $form->textarea('value'      , trans('admin.value'))->rules('required');
+            $form->textarea('description', trans('admin.description'));
 
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->display('created_at'  , trans('admin.created_at'));
+            $form->display('updated_at'  , trans('admin.updated_at'));
         });
     }
 }
