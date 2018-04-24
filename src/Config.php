@@ -40,7 +40,10 @@ class Config extends Extension
     {
         parent::routes(function ($router) {
             /* @var \Illuminate\Routing\Router $router */
-            $router->resource('config', 'Encore\Admin\Config\ConfigController');
+            $router->resource(
+                config('admin.extensions.config.name', 'config'),
+                config('admin.extensions.config.controller', 'Encore\Admin\Config\ConfigController')
+            );
         });
     }
 
