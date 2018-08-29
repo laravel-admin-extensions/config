@@ -20,7 +20,7 @@ class ConfigController
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header('Config');
+            $content->header(trans('admin-ext-config.config'));
             $content->description('Config list..');
 
             $content->body($this->grid());
