@@ -85,7 +85,7 @@ class ConfigController
         return Admin::form(ConfigModel::class, function (Form $form) {
             $form->display('id', 'ID');
             $form->text('name')->rules('required');
-            $form->textarea('value')->rules('required');
+            $form->textarea('value');
             $form->textarea('description');
 
             $form->display('created_at');
