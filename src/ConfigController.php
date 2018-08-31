@@ -85,7 +85,7 @@ class ConfigController
         return Admin::form(ConfigModel::class, function (Form $form) {
             $form->display('id', trans('admin-ext-config.id'));
             $form->text('name', trans('admin-ext-config.name'))->rules('required');
-            $form->textarea('value', trans('admin-ext-config.value'))->rules('required');
+            $form->textarea('value', trans('admin-ext-config.value'));
             $form->textarea('description', trans('admin-ext-config.description'));
 
             $form->display('created_at', trans('admin-ext-config.created_at'));
