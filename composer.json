@@ -5,6 +5,7 @@
     "keywords": ["laravel-admin", "setting"],
     "homepage": "https://github.com/laravel-admin-extensions/config",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "z-song",

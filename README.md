@@ -19,6 +19,8 @@ Inspired by https://github.com/laravel-backpack/settings.
 ```
 $ composer require laravel-admin-ext/config
 
+$ php artisan vendor:publish --provider="Encore\Admin\Config\ConfigServiceProvider"
+
 $ php artisan migrate
 ```
 
