@@ -2,94 +2,113 @@
 
 namespace Encore\Admin\Config;
 
-use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Show;
 
 class ConfigController
 {
-    use ModelForm;
+    use HasResourceActions;
 
     /**
      * Index interface.
      *
      * @return Content
      */
-    public function index()
+    public function index(Content $content)
     {
-        return Admin::content(function (Content $content) {
-            $content->header('Config');
-            $content->description('Config list..');
-
-            $content->body($this->grid());
-        });
+        return $content
+            ->header('Config')
+            ->description('list')
+            ->body($this->grid());
     }
 
     /**
      * Edit interface.
      *
-     * @param $id
+     * @param integer $id
+     * @param Content $content
      *
      * @return Content
      */
-    public function edit($id)
+    public function edit($id, Content $content)
     {
-        return Admin::content(function (Content $content) use ($id) {
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
+        return $content
+            ->header('Config')
+            ->description('edit')
+            ->body($this->form()->edit($id));
     }
 
     /**
      * Create interface.
      *
+     * @param Content $content
+     *
      * @return Content
      */
-    public function create()
+    public function create(Content $content)
     {
-        return Admin::content(function (Content $content) {
-            $content->header('header');
-            $content->description('description');
+        return $content
+            ->header('Config')
+            ->description('create')
+            ->body($this->form());
+    }
 
-            $content->body($this->form());
-        });
+    public function show($id, Content $content)
+    {
+        return $content
+            ->header('Config')
+            ->description('detail')
+            ->body(Admin::show(ConfigModel::findOrFail($id), function (Show $show) {
+
+                $show->id();
+                $show->name();
+                $show->value();
+                $show->description();
+                $show->created_at();
+                $show->updated_at();
+                
+        }));
     }
 
     public function grid()
     {
-        return Admin::grid(ConfigModel::class, function (Grid $grid) {
-            $grid->id('ID')->sortable();
-            $grid->name()->display(function ($name) {
-                return "<a tabindex=\"0\" class=\"btn btn-xs btn-twitter\" role=\"button\" data-toggle=\"popover\" data-html=true title=\"Usage\" data-content=\"<code>config('$name');</code>\">$name</a>";
-            });
-            $grid->value();
-            $grid->description();
+        $grid = new Grid(new ConfigModel());
 
-            $grid->created_at();
-            $grid->updated_at();
-
-            $grid->filter(function ($filter) {
-                $filter->disableIdFilter();
-                $filter->like('name');
-                $filter->like('value');
-            });
+        $grid->id('ID')->sortable();
+        $grid->name()->display(function ($name) {
+            return "<a tabindex=\"0\" class=\"btn btn-xs btn-twitter\" role=\"button\" data-toggle=\"popover\" data-html=true title=\"Usage\" data-content=\"<code>config('$name');</code>\">$name</a>";
         });
+        $grid->value();
+        $grid->description();
+
+        $grid->created_at();
+        $grid->updated_at();
+
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->like('name');
+            $filter->like('value');
+        });
+
+        return $grid;
     }
 
     public function form()
     {
-        return Admin::form(ConfigModel::class, function (Form $form) {
-            $form->display('id', 'ID');
-            $form->text('name')->rules('required');
-            $form->textarea('value')->rules('required');
-            $form->textarea('description');
+        $form = new Form(new ConfigModel());
 
-            $form->display('created_at');
-            $form->display('updated_at');
-        });
+        $form->display('id', 'ID');
+        $form->text('name')->rules('required');
+        $form->textarea('value')->rules('required');
+        $form->textarea('description');
+
+        $form->display('created_at');
+        $form->display('updated_at');
+
+        return $form;
     }
 }
