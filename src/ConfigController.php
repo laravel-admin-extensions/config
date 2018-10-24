@@ -29,7 +29,7 @@ class ConfigController
     /**
      * Edit interface.
      *
-     * @param integer $id
+     * @param int     $id
      * @param Content $content
      *
      * @return Content
@@ -63,15 +63,13 @@ class ConfigController
             ->header('Config')
             ->description('detail')
             ->body(Admin::show(ConfigModel::findOrFail($id), function (Show $show) {
-
                 $show->id();
                 $show->name();
                 $show->value();
                 $show->description();
                 $show->created_at();
                 $show->updated_at();
-                
-        }));
+            }));
     }
 
     public function grid()
