@@ -23,9 +23,7 @@ class ConfigModel extends Model
     /**
      * Set the config's value.
      *
-     * @param null $value
-     *
-     * @return string|null
+     * @param string|null $value
      */
     public function setValueAttribute($value = null)
     {
