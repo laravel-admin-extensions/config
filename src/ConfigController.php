@@ -101,7 +101,11 @@ class ConfigController
 
         $form->display('id', 'ID');
         $form->text('name')->rules('required');
-        $form->textarea('value')->rules('required');
+        if (config('admin.extensions.config.valueEmptyStringAllowed', false)) {
+            $form->textarea('value');
+        } else {
+            $form->textarea('value')->rules('required');
+        }
         $form->textarea('description');
 
         $form->display('created_at');
