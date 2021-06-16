@@ -15,7 +15,7 @@ class Config extends Extension
      */
     public static function load()
     {
-        $configs = Cache::remember('admin_config',86400,function(){
+        $configs = Cache::remember('admin_config', 86400, function () {
             return ConfigModel::all(['name', 'value']);
         });
         foreach ($configs as $config) {
