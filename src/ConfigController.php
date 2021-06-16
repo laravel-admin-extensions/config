@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Cache;
 
 class ConfigController
 {
@@ -110,6 +111,10 @@ class ConfigController
 
         $form->display('created_at');
         $form->display('updated_at');
+        
+        $form->saved(function (Form $form) {
+            Cache::forget('admin_config');
+        });
 
         return $form;
     }
