@@ -18,7 +18,6 @@ class Config extends Extension
         $configs = Cache::remember('admin_config',86400,function(){
             return ConfigModel::all(['name', 'value']);
         });
-        
         foreach ($configs as $config) {
             config([$config['name'] => $config['value']]);
         }
