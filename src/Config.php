@@ -4,6 +4,7 @@ namespace Encore\Admin\Config;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Extension;
+use Illuminate\Support\Facades\Cache;
 
 class Config extends Extension
 {
@@ -14,7 +15,10 @@ class Config extends Extension
      */
     public static function load()
     {
-        foreach (ConfigModel::all(['name', 'value']) as $config) {
+        $configs = Cache::remember('admin_config', 86400, function () {
+            return ConfigModel::all(['name', 'value']);
+        });
+        foreach ($configs as $config) {
             config([$config['name'] => $config['value']]);
         }
     }
