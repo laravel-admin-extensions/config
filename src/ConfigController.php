@@ -111,7 +111,6 @@ class ConfigController
 
         $form->display('created_at');
         $form->display('updated_at');
-        
         $form->saved(function (Form $form) {
             Cache::forget('admin_config');
         });
